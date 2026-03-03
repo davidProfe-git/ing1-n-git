@@ -1,2 +1,380 @@
-<h1>Hola clase de ingenieria</h1>
-<h1>este es su primer proyecto de git</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alex — Carta de Presentación</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;600&family=Lato:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gold: #c9a96e;
+      --gold-light: #e8d5a3;
+      --gold-dark: #8b6914;
+      --cream: #faf6ef;
+      --ink: #1a1410;
+      --ink-light: #4a3f32;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lato', sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 80% 60% at 20% 80%, rgba(201,169,110,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 20%, rgba(201,169,110,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 100% 100% at 50% 50%, #1a1410 0%, #0d0b08 100%);
+      animation: bgPulse 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgPulse {
+      from { opacity: 1; }
+      to { opacity: 0.85; }
+    }
+
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0;
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.2; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    /* Card */
+    .card {
+      position: relative;
+      width: min(680px, 92vw);
+      background: var(--cream);
+      padding: 60px 64px 56px;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: revealCard 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+    }
+
+    @keyframes revealCard {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Decorative corners */
+    .card::before, .card::after {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border-color: var(--gold);
+      border-style: solid;
+    }
+    .card::before { top: 18px; left: 18px; border-width: 1.5px 0 0 1.5px; }
+    .card::after  { bottom: 18px; right: 18px; border-width: 0 1.5px 1.5px 0; }
+
+    .corner-tr, .corner-bl {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border-color: var(--gold);
+      border-style: solid;
+    }
+    .corner-tr { top: 18px; right: 18px; border-width: 1.5px 1.5px 0 0; }
+    .corner-bl { bottom: 18px; left: 18px; border-width: 0 0 1.5px 1.5px; }
+
+    /* Header ornament */
+    .ornament {
+      text-align: center;
+      color: var(--gold);
+      font-size: 10px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.9s forwards;
+    }
+
+    .ornament-line {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .ornament-line::before,
+    .ornament-line::after {
+      content: '';
+      flex: 1;
+      max-width: 70px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold));
+    }
+    .ornament-line::after {
+      background: linear-gradient(to left, transparent, var(--gold));
+    }
+
+    /* Name */
+    .name-wrap {
+      text-align: center;
+      margin-bottom: 6px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 1.1s forwards;
+    }
+
+    .name {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(52px, 12vw, 84px);
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 14px;
+      line-height: 1;
+      text-transform: uppercase;
+      position: relative;
+      display: inline-block;
+    }
+
+    .name::after {
+      content: 'Diego Leon ';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 40%, var(--gold-light) 60%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0;
+      animation: goldReveal 1.4s ease 1.6s forwards;
+    }
+
+    @keyframes goldReveal {
+      to { opacity: 1; }
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 28px 0 30px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1.4s forwards;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-dark));
+    }
+    .divider-line:last-child {
+      background: linear-gradient(to left, transparent, var(--gold-dark));
+    }
+
+    .divider-diamond {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    /* Body text */
+    .body-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--ink-light);
+      line-height: 1.85;
+      text-align: center;
+      font-style: italic;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 1.6s forwards;
+    }
+
+    /* Info row */
+    .info-row {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 36px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1.9s forwards;
+      flex-wrap: wrap;
+    }
+
+    .info-item {
+      text-align: center;
+    }
+
+    .info-label {
+      font-family: 'Cinzel', serif;
+      font-size: 8px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .info-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      color: var(--ink);
+      font-weight: 300;
+    }
+
+    /* Footer */
+    .footer-ornament {
+      text-align: center;
+      margin-top: 38px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 2.1s forwards;
+    }
+
+    .footer-ornament svg {
+      width: 60px;
+      height: 20px;
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 0.8;
+      opacity: 0.7;
+    }
+
+    .seal {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      margin: 0 16px;
+      position: relative;
+    }
+
+    .seal::before {
+      content: '✦';
+      font-size: 14px;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .h-line {
+      display: inline-block;
+      width: 50px;
+      height: 1px;
+      background: var(--gold);
+      vertical-align: middle;
+      opacity: 0.5;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Subtle shimmer on hover */
+    .card:hover .name::after {
+      animation: shimmer 2s ease infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.3); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Card -->
+  <div class="card">
+    <div class="corner-tr"></div>
+    <div class="corner-bl"></div>
+
+    <div class="ornament">
+      <div class="ornament-line">Carta de Presentación</div>
+    </div>
+
+    <div class="name-wrap">
+      <span class="name">Diego Leon </span>
+    </div>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-diamond"></div>
+      <div class="divider-line"></div>
+    </div>
+
+    <p class="body-text">
+      Con mucho gusto me presento ante ustedes.<br/>
+      Soy una persona apasionada, comprometida y con<br/>
+      visión clara hacia el éxito y la excelencia.
+    </p>
+
+    <div class="info-row">
+      <div class="info-item">
+        <div class="info-label">Nombre</div>
+        <div class="info-value">Diego Leon </div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Actitud</div>
+        <div class="info-value">Siempre Positiva</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Disponibilidad</div>
+        <div class="info-value">Inmediata</div>
+      </div>
+    </div>
+
+    <div class="footer-ornament">
+      <span class="h-line"></span>
+      <span class="seal"></span>
+      <span class="h-line"></span>
+    </div>
+  </div>
+
+  <script>
+    // Generate floating particles
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 35; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 3 + 1;
+      p.style.cssText = `
+        left: ${Math.random() * 100}%;
+        width: ${size}px;
+        height: ${size}px;
+        animation-duration: ${Math.random() * 12 + 8}s;
+        animation-delay: ${Math.random() * 10}s;
+      `;
+      container.appendChild(p);
+    }
+  </script>
+</body>
+</html>
