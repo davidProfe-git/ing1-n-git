@@ -1,2 +1,202 @@
-<h1>Hola clase de ingenieria</h1>
-<h1>este es su primer proyecto de git</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjeta de Presentación - Javier Patiño</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a3e 50%, #0d0d2b 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+
+        .tarjeta-container {
+            perspective: 1000px;
+        }
+
+        .tarjeta {
+            width: 100%;
+            max-width: 450px;
+            height: 280px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 255, 255, 0.1), 
+                        0 0 40px rgba(0, 255, 255, 0.05),
+                        0 0 80px rgba(138, 43, 226, 0.05);
+            border: 2px solid rgba(0, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .tarjeta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
+            animation: glow 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(20px, 20px);
+            }
+        }
+
+        .tarjeta:hover {
+            box-shadow: 0 30px 80px rgba(0, 255, 255, 0.2), 
+                        0 0 60px rgba(0, 255, 255, 0.1),
+                        0 0 120px rgba(138, 43, 226, 0.1);
+            transform: translateY(-5px);
+            border-color: rgba(0, 255, 255, 0.4);
+        }
+
+        .contenido {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .encabezado {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .icono-tech {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00ffff 0%, #8a2be2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 24px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .nombre-titulo {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nombre {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ffff 0%, #8a2be2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2px;
+        }
+
+        .separador {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #00ffff 50%, transparent 100%);
+            margin: 15px 0;
+        }
+
+        .info-seccion {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #a0a0c0;
+            gap: 8px;
+        }
+
+        .info-item .icon {
+            color: #00ffff;
+            font-weight: bold;
+        }
+
+        .decoracion {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            opacity: 0.05;
+            background: radial-gradient(circle, #00ffff 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .linea-decorativa {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent 0%, #00ffff 30%, #8a2be2 70%, transparent 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="tarjeta-container">
+        <div class="tarjeta">
+            <div class="linea-decorativa"></div>
+            <div class="contenido">
+                <div>
+                    <div class="encabezado">
+                        <div class="icono-tech">💻</div>
+                        <div class="nombre-titulo">
+                            <div class="nombre">JAVIER PATIÑO</div>
+                        </div>
+                    </div>
+                    <div class="separador"></div>
+                </div>
+
+                <div class="info-seccion">
+                    <div class="info-item">
+                        <span class="icon">●</span>
+                        <span>Desarrollador | Ingeniero</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="icon">●</span>
+                        <span>Soluciones Tecnológicas</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="icon">●</span>
+                        <span>javier.patino@email.com</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="icon">●</span>
+                        <span>+34 XXX XXX XXX</span>
+                    </div>
+                </div>
+            </div>
+            <div class="decoracion"></div>
+        </div>
+    </div>
+</body>
+</html>
