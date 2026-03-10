@@ -1,2 +1,96 @@
-<h1>Hola clase de ingenieria</h1>
-<h1>este es su primer proyecto de git</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presentación - Daniel Rojas</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins', sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:white;
+}
+
+.card{
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    padding:40px;
+    border-radius:20px;
+    width:400px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:scale(1.05);
+}
+
+h1{
+    font-size:32px;
+    margin-bottom:15px;
+    color:#00e5ff;
+}
+
+.section{
+    margin:15px 0;
+}
+
+.section h2{
+    font-size:18px;
+    color:#ffd166;
+    margin-bottom:5px;
+}
+
+.section p{
+    font-size:16px;
+}
+
+.footer{
+    margin-top:20px;
+    font-size:13px;
+    opacity:0.7;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+    <h1>Daniel Rojas</h1>
+
+    <div class="section">
+        <h2>⚽ Gustos</h2>
+        <p>Fútbol y Desarrollo</p>
+    </div>
+
+    <div class="section">
+        <h2>🎸 Música</h2>
+        <p>Metal y Rock</p>
+    </div>
+
+    <div class="section">
+        <h2>🔥 Animes Favoritos</h2>
+        <p>Naruto y Dragon Ball</p>
+    </div>
+
+    <div class="footer">
+        Página personal
+    </div>
+</div>
+
+</body>
+</html>
