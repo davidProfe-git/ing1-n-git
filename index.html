@@ -1,2 +1,71 @@
-<h1>Hola clase de ingenieria</h1>
-<h1>este es su primer proyecto de git</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjeta de Presentación</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            color: white;
+            animation: fadeIn 2s ease-in-out;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: slideIn 1s ease-out 0.5s both;
+        }
+        p {
+            font-size: 1.2em;
+            margin: 5px 0;
+            animation: slideIn 1s ease-out 1s both;
+        }
+        .contact {
+            margin-top: 20px;
+            animation: slideIn 1s ease-out 1.5s both;
+        }
+        .contact p {
+            font-size: 1em;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Samuel</h1>
+        <p>Estudiante de Ingeniería</p>
+        <p>Proyecto de Git</p>
+        <div class="contact">
+            <p>Email: samuel@example.com</p>
+            <p>Teléfono: +123 456 7890</p>
+            <p>LinkedIn: linkedin.com/in/samuel</p>
+        </div>
+    </div>
+</body>
+</html>
