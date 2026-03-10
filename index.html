@@ -4,26 +4,35 @@
     <meta charset="UTF-8">
     <title>Mi Tarjeta de Presentación</title>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f4f4f9; }
+        body { 
+            font-family: Arial, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            /* Fondo de toda la página verde manzana */
+            background-color: #8db600; 
+        }
         
         .card { 
-            /* Ahora el fondo es verde manzana */
+            /* Fondo de la tarjeta también verde manzana */
             background-color: #8db600; 
             padding: 2rem; 
             border-radius: 15px; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2); 
+            /* Sombra un poco más oscura para que la tarjeta se note sobre el fondo */
+            box-shadow: 20px 20px 60px #789b00, -20px -20px 60px #a2d100;
             text-align: center; 
-            /* Quitamos el borde superior porque ya todo es verde */
         }
 
         h1 { 
-            color: #ffffff; /* Letra blanca para que resalte en el verde */
+            color: #333; 
             margin-bottom: 0.5rem; 
             font-weight: bold; 
         }
 
         p { 
-            color: #ffffff; /* Letra blanca */
+            color: #444; 
             font-size: 1.1rem; 
             font-weight: bold; 
         }
@@ -35,3 +44,4 @@
         <p>Estudiante de Ingeniería de Software</p>
     </div>
 </body>
+</html>
