@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Finanzas personales</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(145deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      color: #e2e8f0;
+      padding: 1.5rem;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-ingresos {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+    .btn-ingresos:hover { box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45); }
+    .btn-gastos {
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+    }
+    .btn-gastos:hover { box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45); }
+    .chart-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .chart-card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 1rem 0;
+      color: #cbd5e1;
+    }
+    .chart-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .chart-header h2 { margin: 0; }
+    .chart-header input[type="month"] {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 8px;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+    .chart-wrap {
+      position: relative;
+      height: 320px;
+    }
+    .resumen {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .resumen-item {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .resumen-item .valor {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+    .resumen-item .etiqueta {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.25rem;
+    }
+    .verde { color: #34d399; }
+    .rojo { color: #f87171; }
+    .blanco { color: #e2e8f0; }
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.activo { display: flex; }
+    .modal {
+      background: #1e293b;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 14px;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 360px;
+    }
+    .modal h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.1rem;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-bottom: 0.35rem;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 8px;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #64748b;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+    }
+    .modal-actions .btn {
+      flex: 1;
+      justify-content: center;
+    }
+    .btn-cancel {
+      background: #334155;
+      color: #cbd5e1;
+    }
+    .lista {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: 14px;
+      padding: 1rem;
+    }
+    .lista h2 {
+      font-size: 1rem;
+      margin: 0 0 0.75rem 0;
+      color: #cbd5e1;
+    }
+    .lista ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .lista li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 0.35rem;
+      font-size: 0.9rem;
+      background: rgba(15, 23, 42, 0.5);
+    }
+    .lista li .monto.ingreso { color: #34d399; }
+    .lista li .monto.gasto { color: #f87171; }
+    .lista li .fecha { font-size: 0.75rem; color: #64748b; }
+    .vacio { color: #64748b; text-align: center; padding: 1rem; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Finanzas personales</h1>
+    <p class="subtitle">Registra ingresos y gastos y revisa tu balance diario.</p>
+
+    <div class="actions">
+      <button type="button" class="btn btn-ingresos" id="btnIngresos" aria-label="Añadir ingreso">
+        <span aria-hidden="true">+</span> Ingresos
+      </button>
+      <button type="button" class="btn btn-gastos" id="btnGastos" aria-label="Añadir gasto">
+        <span aria-hidden="true">−</span> Gastos
+      </button>
+    </div>
+
+    <div class="resumen">
+      <div class="resumen-item">
+        <div class="valor verde" id="totalIngresos">0.00</div>
+        <div class="etiqueta">Ingresos</div>
+      </div>
+      <div class="resumen-item">
+        <div class="valor rojo" id="totalGastos">0.00</div>
+        <div class="etiqueta">Gastos</div>
+      </div>
+      <div class="resumen-item">
+        <div class="valor blanco" id="balance">0.00</div>
+        <div class="etiqueta">Balance</div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-header">
+        <h2>Ingresos y gastos diarios del mes</h2>
+        <input type="month" id="mesGrafica" aria-label="Seleccionar mes"/>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="chartDiario" aria-label="Gráfica de ingresos y gastos diarios"></canvas>
+      </div>
+    </div>
+
+    <div class="lista">
+      <h2>Últimos movimientos</h2>
+      <ul id="listaMovimientos"></ul>
+    </div>
+  </div>
+
+  <!-- Modal Ingreso -->
+  <div class="modal-overlay" id="modalIngreso" role="dialog" aria-labelledby="tituloIngreso" aria-modal="true">
+    <div class="modal">
+      <h3 id="tituloIngreso">Nuevo ingreso</h3>
+      <form id="formIngreso">
+        <div class="form-group">
+          <label for="ingresoMonto">Monto</label>
+          <input type="number" id="ingresoMonto" step="0.01" min="0.01" required placeholder="0.00"/>
+        </div>
+        <div class="form-group">
+          <label for="ingresoDesc">Descripción</label>
+          <input type="text" id="ingresoDesc" placeholder="Ej. Salario, venta…"/>
+        </div>
+        <div class="form-group">
+          <label for="ingresoFecha">Fecha</label>
+          <input type="date" id="ingresoFecha" required/>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-cancel" id="cerrarIngreso">Cancelar</button>
+          <button type="submit" class="btn btn-ingresos">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Gasto -->
+  <div class="modal-overlay" id="modalGasto" role="dialog" aria-labelledby="tituloGasto" aria-modal="true">
+    <div class="modal">
+      <h3 id="tituloGasto">Nuevo gasto</h3>
+      <form id="formGasto">
+        <div class="form-group">
+          <label for="gastoMonto">Monto</label>
+          <input type="number" id="gastoMonto" step="0.01" min="0.01" required placeholder="0.00"/>
+        </div>
+        <div class="form-group">
+          <label for="gastoDesc">Descripción</label>
+          <input type="text" id="gastoDesc" placeholder="Ej. Supermercado, transporte…"/>
+        </div>
+        <div class="form-group">
+          <label for="gastoFecha">Fecha</label>
+          <input type="date" id="gastoFecha" required/>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-cancel" id="cerrarGasto">Cancelar</button>
+          <button type="submit" class="btn btn-gastos">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'finanzas-personales-transacciones';
+
+    function getTransacciones() {
+      try {
+        const data = localStorage.getItem(STORAGE_KEY);
+        return data ? JSON.parse(data) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function setTransacciones(arr) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    }
+
+    function hoyISO() {
+      const d = new Date();
+      return d.toISOString().slice(0, 10);
+    }
+
+    function agregarTransaccion(tipo, monto, descripcion, fecha) {
+      const t = {
+        id: Date.now(),
+        tipo,
+        monto: Math.abs(Number(monto)),
+        descripcion: (descripcion || '').trim(),
+        fecha: fecha || hoyISO()
+      };
+      const list = getTransacciones();
+      list.push(t);
+      setTransacciones(list);
+      return t;
+    }
+
+    function diasDelMes(anio, mes) {
+      return new Date(anio, mes, 0).getDate();
+    }
+
+    function ingresosYGastosPorDiaDelMes(anio, mes) {
+      const list = getTransacciones();
+      const numDias = diasDelMes(anio, mes);
+      const labels = [];
+      const ingresosPorDia = [];
+      const gastosPorDia = [];
+      const prefijo = anio + '-' + String(mes).padStart(2, '0');
+      for (let d = 1; d <= numDias; d++) {
+        const diaStr = String(d).padStart(2, '0');
+        labels.push(d.toString());
+        let ing = 0, gas = 0;
+        const fechaDia = prefijo + '-' + diaStr;
+        list.forEach(({ tipo, monto, fecha }) => {
+          if (fecha !== fechaDia) return;
+          if (tipo === 'ingreso') ing += monto;
+          else gas += monto;
+        });
+        ingresosPorDia.push(ing);
+        gastosPorDia.push(gas);
+      }
+      return { labels, ingresosPorDia, gastosPorDia };
+    }
+
+    function actualizarResumen() {
+      const list = getTransacciones();
+      let ingresos = 0, gastos = 0;
+      list.forEach(({ tipo, monto }) => {
+        if (tipo === 'ingreso') ingresos += monto;
+        else gastos += monto;
+      });
+      document.getElementById('totalIngresos').textContent = ingresos.toFixed(2);
+      document.getElementById('totalGastos').textContent = gastos.toFixed(2);
+      const balance = ingresos - gastos;
+      const elBalance = document.getElementById('balance');
+      elBalance.textContent = balance.toFixed(2);
+      elBalance.className = 'valor ' + (balance >= 0 ? 'verde' : 'rojo');
+    }
+
+    function actualizarLista() {
+      const list = getTransacciones();
+      const ul = document.getElementById('listaMovimientos');
+      if (list.length === 0) {
+        ul.innerHTML = '<li class="vacio">Aún no hay movimientos. Usa Ingresos o Gastos para añadir.</li>';
+        return;
+      }
+      const ordenadas = [...list].sort((a, b) => b.id - a.id);
+      ul.innerHTML = ordenadas.slice(0, 30).map(({ tipo, monto, descripcion, fecha }) => {
+        const signo = tipo === 'ingreso' ? '+' : '−';
+        const cls = tipo === 'ingreso' ? 'ingreso' : 'gasto';
+        return `<li>
+          <span>${descripcion || (tipo === 'ingreso' ? 'Ingreso' : 'Gasto')}</span>
+          <span><span class="fecha">${fecha}</span> <span class="monto ${cls}">${signo} ${monto.toFixed(2)}</span></span>
+        </li>`;
+      }).join('');
+    }
+
+    let chartDiario = null;
+
+    function mesGraficaActual() {
+      const input = document.getElementById('mesGrafica');
+      const val = input.value;
+      if (val) {
+        const [a, m] = val.split('-').map(Number);
+        return { anio: a, mes: m };
+      }
+      const now = new Date();
+      return { anio: now.getFullYear(), mes: now.getMonth() + 1 };
+    }
+
+    function actualizarGrafica() {
+      const { anio, mes } = mesGraficaActual();
+      const { labels, ingresosPorDia, gastosPorDia } = ingresosYGastosPorDiaDelMes(anio, mes);
+      const ctx = document.getElementById('chartDiario').getContext('2d');
+
+      if (chartDiario) chartDiario.destroy();
+
+      chartDiario = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Ingresos',
+              data: ingresosPorDia,
+              backgroundColor: 'rgba(52, 211, 153, 0.7)',
+              borderColor: '#34d399',
+              borderWidth: 1
+            },
+            {
+              label: 'Gastos',
+              data: gastosPorDia,
+              backgroundColor: 'rgba(248, 113, 113, 0.7)',
+              borderColor: '#f87171',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: { color: '#94a3b8', usePointStyle: true }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  return ctx.dataset.label + ': ' + Number(ctx.raw).toFixed(2);
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(148, 163, 184, 0.15)' },
+              ticks: { color: '#94a3b8' }
+            },
+            x: {
+              title: { display: true, text: 'Día del mes', color: '#94a3b8' },
+              grid: { display: false },
+              ticks: { color: '#94a3b8', maxRotation: 45 }
+            }
+          }
+        }
+      });
+    }
+
+    function refrescarTodo() {
+      const mesInput = document.getElementById('mesGrafica');
+      if (!mesInput.value) {
+        const now = new Date();
+        mesInput.value = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+      }
+      actualizarResumen();
+      actualizarLista();
+      actualizarGrafica();
+    }
+
+    document.getElementById('mesGrafica').addEventListener('change', actualizarGrafica);
+
+    // Modales
+    function abrirModal(id) {
+      document.getElementById(id).classList.add('activo');
+      if (id === 'modalIngreso') {
+        document.getElementById('ingresoFecha').value = hoyISO();
+        document.getElementById('ingresoMonto').focus();
+      } else {
+        document.getElementById('gastoFecha').value = hoyISO();
+        document.getElementById('gastoMonto').focus();
+      }
+    }
+
+    function cerrarModal(id) {
+      document.getElementById(id).classList.remove('activo');
+    }
+
+    document.getElementById('btnIngresos').addEventListener('click', () => abrirModal('modalIngreso'));
+    document.getElementById('btnGastos').addEventListener('click', () => abrirModal('modalGasto'));
+    document.getElementById('cerrarIngreso').addEventListener('click', () => cerrarModal('modalIngreso'));
+    document.getElementById('cerrarGasto').addEventListener('click', () => cerrarModal('modalGasto'));
+
+    document.getElementById('formIngreso').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const monto = document.getElementById('ingresoMonto').value;
+      const desc = document.getElementById('ingresoDesc').value;
+      const fecha = document.getElementById('ingresoFecha').value;
+      agregarTransaccion('ingreso', monto, desc, fecha);
+      document.getElementById('formIngreso').reset();
+      document.getElementById('ingresoFecha').value = hoyISO();
+      cerrarModal('modalIngreso');
+      refrescarTodo();
+    });
+
+    document.getElementById('formGasto').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const monto = document.getElementById('gastoMonto').value;
+      const desc = document.getElementById('gastoDesc').value;
+      const fecha = document.getElementById('gastoFecha').value;
+      agregarTransaccion('gasto', monto, desc, fecha);
+      document.getElementById('formGasto').reset();
+      document.getElementById('gastoFecha').value = hoyISO();
+      cerrarModal('modalGasto');
+      refrescarTodo();
+    });
+
+    // Cerrar modal al hacer clic fuera
+    document.getElementById('modalIngreso').addEventListener('click', (e) => {
+      if (e.target.id === 'modalIngreso') cerrarModal('modalIngreso');
+    });
+    document.getElementById('modalGasto').addEventListener('click', (e) => {
+      if (e.target.id === 'modalGasto') cerrarModal('modalGasto');
+    });
+
+    refrescarTodo();
+  </script>
+</body>
+</html>
